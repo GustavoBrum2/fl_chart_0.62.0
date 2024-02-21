@@ -103,8 +103,8 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         touchResponse?.lineBarSpots == null ||
         touchResponse!.lineBarSpots!.isEmpty) {
       setState(() {
-        _showingTouchedTooltips.clear();
-        _showingTouchedIndicators.clear();
+        // _showingTouchedTooltips.clear();
+        // _showingTouchedIndicators.clear();
       });
       return;
     }
