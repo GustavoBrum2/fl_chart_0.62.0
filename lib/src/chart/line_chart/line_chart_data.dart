@@ -17,7 +17,7 @@ class LineChartData extends AxisChartData with EquatableMixin {
   /// [LineChart] draws some lines in various shapes and overlaps them.
   /// lines are defined in [lineBarsData], sometimes you need to fill space between two bars
   /// with a color or gradient, you can use [betweenBarsData] to achieve that.
-  ////
+  ///
   /// It draws some titles on left, top, right, bottom sides per each axis number,
   /// you can modify [titlesData] to have your custom titles,
   /// also you can define the axis title (one text per axis) for each side
