@@ -54,6 +54,11 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   Widget build(BuildContext context) {
     final showingData = _getData();
 
+    if (widget.clearSpots) {
+      _showingTouchedIndicators.clear();
+      _showingTouchedTooltips.clear();
+    }
+
     return AxisChartScaffoldWidget(
       chart: LineChartLeaf(
         data: _withTouchedIndicators(_lineChartDataTween!.evaluate(animation)),
