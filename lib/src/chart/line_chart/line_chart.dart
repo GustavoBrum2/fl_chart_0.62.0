@@ -11,13 +11,13 @@ class LineChart extends ImplicitlyAnimatedWidget {
   /// new values with animation, and duration is [swapAnimationDuration].
   /// also you can change the [swapAnimationCurve]
   /// which default is [Curves.linear].
-  LineChart(
+  const LineChart(
     this.data, {
     this.chartRendererKey,
     super.key,
     Duration swapAnimationDuration = const Duration(milliseconds: 150),
     Curve swapAnimationCurve = Curves.linear,
-    bool? clearSpots = false,
+    required this.clearSpots,
   }) : super(
           duration: swapAnimationDuration,
           curve: swapAnimationCurve,
@@ -26,7 +26,7 @@ class LineChart extends ImplicitlyAnimatedWidget {
   /// Determines how the [LineChart] should be look like.
   final LineChartData data;
 
-  bool? clearSpots;
+  final bool clearSpots;
 
   /// We pass this key to our renderers which are supposed to
   /// render the chart itself (without anything around the chart).
@@ -106,11 +106,9 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         touchResponse?.lineBarSpots == null ||
         touchResponse!.lineBarSpots!.isEmpty) {
       setState(() {
-        if (widget.clearSpots != null) {
-          if (widget.clearSpots!) {
-            _showingTouchedIndicators.clear();
-            _showingTouchedTooltips.clear();
-          }
+        if (widget.clearSpots) {
+          _showingTouchedIndicators.clear();
+          _showingTouchedTooltips.clear();
         }
       });
       return;
