@@ -18,7 +18,6 @@ class LineChart extends ImplicitlyAnimatedWidget {
     Duration swapAnimationDuration = const Duration(milliseconds: 150),
     Curve swapAnimationCurve = Curves.linear,
     required this.clearSpotsFunction,
-    required this.clearSpots,
   }) : super(
           duration: swapAnimationDuration,
           curve: swapAnimationCurve,
@@ -27,7 +26,6 @@ class LineChart extends ImplicitlyAnimatedWidget {
   /// Determines how the [LineChart] should be look like.
   final LineChartData data;
   final Function(Function function) clearSpotsFunction;
-  final bool clearSpots;
 
   /// We pass this key to our renderers which are supposed to
   /// render the chart itself (without anything around the chart).
@@ -112,10 +110,8 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         touchResponse?.lineBarSpots == null ||
         touchResponse!.lineBarSpots!.isEmpty) {
       setState(() {
-        if (widget.clearSpots) {
-          _showingTouchedIndicators.clear();
-          _showingTouchedTooltips.clear();
-        }
+        // _showingTouchedIndicators.clear();
+        // _showingTouchedTooltips.clear();
       });
       return;
     }

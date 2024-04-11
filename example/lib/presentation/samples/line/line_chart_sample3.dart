@@ -167,6 +167,7 @@ class _LineChartSample3State extends State<LineChartSample3> {
           child: Padding(
             padding: const EdgeInsets.only(right: 20.0, left: 12),
             child: LineChart(
+              clearSpotsFunction: (Function function) {},
               LineChartData(
                 lineTouchData: LineTouchData(
                   getTouchedSpotIndicator:

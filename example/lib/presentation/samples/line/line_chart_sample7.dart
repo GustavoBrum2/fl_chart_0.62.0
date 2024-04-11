@@ -95,6 +95,8 @@ class LineChartSample7 extends StatelessWidget {
           bottom: 4,
         ),
         child: LineChart(
+      clearSpotsFunction: (Function function) {},
+
           LineChartData(
             lineTouchData: LineTouchData(enabled: false),
             lineBarsData: [

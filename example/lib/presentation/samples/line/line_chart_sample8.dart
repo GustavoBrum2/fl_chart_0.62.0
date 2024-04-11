@@ -58,6 +58,7 @@ class _LineChartSample8State extends State<LineChartSample8> {
                     bottom: 12,
                   ),
                   child: LineChart(
+                    clearSpotsFunction: (Function function) {},
                     mainData(imageSnapshot.data!),
                   ),
                 ),
