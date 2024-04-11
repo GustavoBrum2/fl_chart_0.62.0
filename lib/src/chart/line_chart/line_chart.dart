@@ -11,12 +11,13 @@ class LineChart extends ImplicitlyAnimatedWidget {
   /// new values with animation, and duration is [swapAnimationDuration].
   /// also you can change the [swapAnimationCurve]
   /// which default is [Curves.linear].
-  const LineChart(
+  LineChart(
     this.data, {
     this.chartRendererKey,
     super.key,
     Duration swapAnimationDuration = const Duration(milliseconds: 150),
     Curve swapAnimationCurve = Curves.linear,
+    bool? clearSpots = false,
   }) : super(
           duration: swapAnimationDuration,
           curve: swapAnimationCurve,
@@ -24,6 +25,8 @@ class LineChart extends ImplicitlyAnimatedWidget {
 
   /// Determines how the [LineChart] should be look like.
   final LineChartData data;
+
+  bool? clearSpots;
 
   /// We pass this key to our renderers which are supposed to
   /// render the chart itself (without anything around the chart).
@@ -43,7 +46,7 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   /// but we need to keep the provided callback to notify it too.
   BaseTouchCallback<LineTouchResponse>? _providedTouchCallback;
 
-  final List<ShowingTooltipIndicators> showingTouchedTooltips = [];
+  final List<ShowingTooltipIndicators> _showingTouchedTooltips = [];
 
   final Map<int, List<int>> _showingTouchedIndicators = {};
 
@@ -68,7 +71,7 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
     }
 
     return lineChartData.copyWith(
-      showingTooltipIndicators: showingTouchedTooltips,
+      showingTooltipIndicators: _showingTouchedTooltips,
       lineBarsData: lineChartData.lineBarsData.map((barData) {
         final index = lineChartData.lineBarsData.indexOf(barData);
         return barData.copyWith(
@@ -103,8 +106,12 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         touchResponse?.lineBarSpots == null ||
         touchResponse!.lineBarSpots!.isEmpty) {
       setState(() {
-        // showingTouchedTooltips.clear();
-        _showingTouchedIndicators.clear();
+        if (widget.clearSpots != null) {
+          if (widget.clearSpots!) {
+            _showingTouchedIndicators.clear();
+            _showingTouchedTooltips.clear();
+          }
+        }
       });
       return;
     }
@@ -120,7 +127,7 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         _showingTouchedIndicators[barPos] = [touchedBarSpot.spotIndex];
       }
 
-      showingTouchedTooltips
+      _showingTouchedTooltips
         ..clear()
         ..add(ShowingTooltipIndicators(sortedLineSpots));
     });
