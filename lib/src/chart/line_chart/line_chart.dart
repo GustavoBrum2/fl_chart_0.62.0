@@ -43,7 +43,7 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   /// but we need to keep the provided callback to notify it too.
   BaseTouchCallback<LineTouchResponse>? _providedTouchCallback;
 
-  final List<ShowingTooltipIndicators> _showingTouchedTooltips = [];
+  final List<ShowingTooltipIndicators> showingTouchedTooltips = [];
 
   final Map<int, List<int>> _showingTouchedIndicators = {};
 
@@ -68,7 +68,7 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
     }
 
     return lineChartData.copyWith(
-      showingTooltipIndicators: _showingTouchedTooltips,
+      showingTooltipIndicators: showingTouchedTooltips,
       lineBarsData: lineChartData.lineBarsData.map((barData) {
         final index = lineChartData.lineBarsData.indexOf(barData);
         return barData.copyWith(
@@ -103,8 +103,8 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         touchResponse?.lineBarSpots == null ||
         touchResponse!.lineBarSpots!.isEmpty) {
       setState(() {
-        // _showingTouchedTooltips.clear();
-        // _showingTouchedIndicators.clear();
+        // showingTouchedTooltips.clear();
+        _showingTouchedIndicators.clear();
       });
       return;
     }
@@ -120,7 +120,7 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         _showingTouchedIndicators[barPos] = [touchedBarSpot.spotIndex];
       }
 
-      _showingTouchedTooltips
+      showingTouchedTooltips
         ..clear()
         ..add(ShowingTooltipIndicators(sortedLineSpots));
     });
