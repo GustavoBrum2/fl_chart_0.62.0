@@ -17,6 +17,7 @@ class LineChart extends ImplicitlyAnimatedWidget {
     super.key,
     Duration swapAnimationDuration = const Duration(milliseconds: 150),
     Curve swapAnimationCurve = Curves.linear,
+    required this.clearSpotsFunction,
     required this.clearSpots,
   }) : super(
           duration: swapAnimationDuration,
@@ -25,7 +26,7 @@ class LineChart extends ImplicitlyAnimatedWidget {
 
   /// Determines how the [LineChart] should be look like.
   final LineChartData data;
-
+  final Function(Function function) clearSpotsFunction;
   final bool clearSpots;
 
   /// We pass this key to our renderers which are supposed to
@@ -54,10 +55,10 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   Widget build(BuildContext context) {
     final showingData = _getData();
 
-    if (widget.clearSpots) {
+    widget.clearSpotsFunction.call(() {
       _showingTouchedIndicators.clear();
       _showingTouchedTooltips.clear();
-    }
+    });
 
     return AxisChartScaffoldWidget(
       chart: LineChartLeaf(
