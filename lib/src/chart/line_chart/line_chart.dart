@@ -1,19 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_scaffold_widget.dart';
+import 'package:fl_chart/src/chart/line_chart/line_chart_renderer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'line_chart_renderer.dart';
-
 /// Renders a line chart as a widget, using provided [LineChartData].
 class LineChart extends ImplicitlyAnimatedWidget {
-  /// Determines how the [LineChart] should be look like.
-  final LineChartData data;
-
-  /// We pass this key to our renderers which are supposed to
-  /// render the chart itself (without anything around the chart).
-  final Key? chartRendererKey;
-
   /// [data] determines how the [LineChart] should be look like,
   /// when you make any change in the [LineChartData], it updates
   /// new values with animation, and duration is [swapAnimationDuration].
@@ -22,13 +14,23 @@ class LineChart extends ImplicitlyAnimatedWidget {
   const LineChart(
     this.data, {
     this.chartRendererKey,
-    Key? key,
+    super.key,
     Duration swapAnimationDuration = const Duration(milliseconds: 150),
     Curve swapAnimationCurve = Curves.linear,
+    required this.clearSpots,
   }) : super(
-            key: key,
-            duration: swapAnimationDuration,
-            curve: swapAnimationCurve);
+          duration: swapAnimationDuration,
+          curve: swapAnimationCurve,
+        );
+
+  /// Determines how the [LineChart] should be look like.
+  final LineChartData data;
+
+  final bool clearSpots;
+
+  /// We pass this key to our renderers which are supposed to
+  /// render the chart itself (without anything around the chart).
+  final Key? chartRendererKey;
 
   /// Creates a [_LineChartState]
   @override
@@ -52,6 +54,11 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   Widget build(BuildContext context) {
     final showingData = _getData();
 
+    if (widget.clearSpots) {
+      _showingTouchedIndicators.clear();
+      _showingTouchedTooltips.clear();
+    }
+
     return AxisChartScaffoldWidget(
       chart: LineChartLeaf(
         data: _withTouchedIndicators(_lineChartDataTween!.evaluate(animation)),
@@ -65,8 +72,6 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   LineChartData _withTouchedIndicators(LineChartData lineChartData) {
     if (!lineChartData.lineTouchData.enabled ||
         !lineChartData.lineTouchData.handleBuiltInTouches) {
-      _showingTouchedTooltips.clear();
-      _showingTouchedIndicators.clear();
       return lineChartData;
     }
 
@@ -94,32 +99,29 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
   }
 
   void _handleBuiltInTouch(
-      FlTouchEvent event, LineTouchResponse? touchResponse) {
+    FlTouchEvent event,
+    LineTouchResponse? touchResponse,
+  ) {
+    if (!mounted) {
+      return;
+    }
     _providedTouchCallback?.call(event, touchResponse);
 
     if (!event.isInterestedForInteractions ||
         touchResponse?.lineBarSpots == null ||
         touchResponse!.lineBarSpots!.isEmpty) {
       setState(() {
-        _showingTouchedTooltips.clear();
-        _showingTouchedIndicators.clear();
+        if (widget.clearSpots) {
+          _showingTouchedIndicators.clear();
+          _showingTouchedTooltips.clear();
+        }
       });
       return;
     }
 
     setState(() {
-      final sortedLineSpots = List.of(touchResponse.lineBarSpots!);
-      sortedLineSpots.sort((spot1, spot2) => spot2.y.compareTo(spot1.y));
-
-      for (var indicators in _showingTouchedTooltips) {
-        for (var item in indicators.showingSpots) {
-          if (sortedLineSpots.any((e) => e.spotIndex == item.spotIndex)) {
-            _showingTouchedTooltips.clear();
-            _showingTouchedIndicators.clear();
-            return;
-          }
-        }
-      }
+      final sortedLineSpots = List.of(touchResponse.lineBarSpots!)
+        ..sort((spot1, spot2) => spot2.y.compareTo(spot1.y));
 
       _showingTouchedIndicators.clear();
       for (var i = 0; i < touchResponse.lineBarSpots!.length; i++) {
@@ -128,8 +130,9 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         _showingTouchedIndicators[barPos] = [touchedBarSpot.spotIndex];
       }
 
-      _showingTouchedTooltips.clear();
-      _showingTouchedTooltips.add(ShowingTooltipIndicators(sortedLineSpots));
+      _showingTouchedTooltips
+        ..clear()
+        ..add(ShowingTooltipIndicators(sortedLineSpots));
     });
   }
 
@@ -140,6 +143,6 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
       _getData(),
       (dynamic value) =>
           LineChartDataTween(begin: value as LineChartData, end: widget.data),
-    ) as LineChartDataTween;
+    ) as LineChartDataTween?;
   }
 }
