@@ -12,6 +12,7 @@ class _LineChart extends StatelessWidget {
     return LineChart(
       isShowingMainData ? sampleData1 : sampleData2,
       swapAnimationDuration: const Duration(milliseconds: 250),
+      clearSpots: true,
       clearSpotsFunction: (Function function) {},
     );
   }

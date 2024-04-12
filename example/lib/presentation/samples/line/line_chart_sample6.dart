@@ -122,8 +122,8 @@ class LineChartSample6 extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 2,
         child: LineChart(
-      clearSpotsFunction: (Function function) {},
-
+          clearSpots: true,
+          clearSpotsFunction: (Function function) {},
           LineChartData(
             lineTouchData: LineTouchData(enabled: false),
             lineBarsData: [

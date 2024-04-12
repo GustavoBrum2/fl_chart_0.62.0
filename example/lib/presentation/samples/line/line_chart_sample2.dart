@@ -32,6 +32,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
             ),
             child: LineChart(
               clearSpotsFunction: (Function function) {},
+              clearSpots: true,
               showAvg ? avgData() : mainData(),
             ),
           ),

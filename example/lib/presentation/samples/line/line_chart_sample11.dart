@@ -148,6 +148,7 @@ class _Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LineChart(
+      clearSpots: true,
       clearSpotsFunction: (Function function) {},
       LineChartData(
         lineBarsData: [
