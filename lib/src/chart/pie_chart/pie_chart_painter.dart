@@ -111,6 +111,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         if (section.borderSide.width != 0.0 &&
             section.borderSide.color.opacity != 0.0) {
           _sectionStrokePaint
+            ..strokeCap = section.isCurved ? StrokeCap.round : StrokeCap.butt
             ..strokeWidth = section.borderSide.width
             ..color = section.borderSide.color;
           // Outer
@@ -269,6 +270,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     CanvasWrapper canvasWrapper,
   ) {
     _sectionPaint
+      ..strokeCap = section.isCurved ? StrokeCap.round : StrokeCap.butt
       ..color = section.color
       ..style = PaintingStyle.fill;
     canvasWrapper.drawPath(sectionPath, _sectionPaint);
@@ -291,6 +293,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         ..clipPath(sectionPath);
 
       _sectionStrokePaint
+        ..strokeCap = section.isCurved ? StrokeCap.round : StrokeCap.butt
         ..strokeWidth = section.borderSide.width * 2
         ..color = section.borderSide.color;
       canvasWrapper
