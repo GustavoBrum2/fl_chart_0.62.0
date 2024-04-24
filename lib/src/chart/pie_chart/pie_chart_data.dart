@@ -148,6 +148,7 @@ class PieChartSectionData {
     double? value,
     Color? color,
     double? radius,
+    bool? isCurved,
     bool? showTitle,
     this.titleStyle,
     String? title,
@@ -157,6 +158,7 @@ class PieChartSectionData {
     double? badgePositionPercentageOffset,
   })  : value = value ?? 10,
         color = color ?? Colors.cyan,
+        isCurved = isCurved ?? false,
         radius = radius ?? 40,
         showTitle = showTitle ?? true,
         title = title ?? (value == null ? '' : value.toString()),
@@ -177,6 +179,9 @@ class PieChartSectionData {
 
   /// Defines the radius of section.
   final double radius;
+
+  /// Defines the radius of section.
+  final bool isCurved;
 
   /// Defines show or hide the title of section.
   final bool showTitle;

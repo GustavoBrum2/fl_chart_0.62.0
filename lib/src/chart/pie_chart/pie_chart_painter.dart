@@ -100,6 +100,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       if (sectionDegree == 360) {
         _sectionPaint
           ..color = section.color
+          ..strokeCap = section.isCurved ? StrokeCap.round : StrokeCap.butt
           ..strokeWidth = section.radius
           ..style = PaintingStyle.stroke;
         canvasWrapper.drawCircle(
